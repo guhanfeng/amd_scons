@@ -6,7 +6,6 @@ Compiler settings
 
 import os
 from simple_prints import simple_prints
-from thirdparties import add_thirdparties
 
 generalflags = dict(
     general="-fPIC -rdynamic",

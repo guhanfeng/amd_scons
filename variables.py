@@ -9,19 +9,27 @@ for program.
 """
 
 import os
-from SCons.Environment import Environment
+import platform
 import getpass
+from SCons.Environment import Environment
 from SCons.Variables import (Variables, EnumVariable, PathVariable,
                              BoolVariable)
 from SCons.Script import ARGUMENTS
-import utils
+
+def ostype():
+    """Return the operating system type"""
+
+    if os.name == 'nt':
+        return 'windows'
+    else:
+        return os.uname()[0].lower()
 
 program_vars = Variables('site_scons/build_config.py', ARGUMENTS)
 program_vars.AddVariables(
     # Project specific variables
     EnumVariable('PLATFORM',
                  'build platforms',
-                 utils.ostype(),
+                 ostype(),
                  allowed_values=('windows', 'linux', 'sw')),
     EnumVariable('BUILD_TYPE',
                  'Type of build',
@@ -107,7 +115,6 @@ else:
 def init_dependent_vars(env, prj_dir):
     """Initialize dependent variables based on user configuration"""
     from SCons.Script import Mkdir
-    # ostype = utils.ostype()
     ostype = env['PLATFORM']
     BUILD_OPTION = (ostype + env['CXX'] + 'Int' + env['INT_TYPE'] + 'Float' +
                     env['FLOAT_TYPE'] + env['BUILD_TYPE'])
