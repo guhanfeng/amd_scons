@@ -16,17 +16,9 @@ from SCons.Variables import (Variables, EnumVariable, PathVariable,
 from SCons.Script import ARGUMENTS
 import utils
 
-### General Variables
-SCONS_SITE_DIR = os.path.dirname(__file__)
-PROJECT_DIR = os.path.dirname(SCONS_SITE_DIR)
-PROJECT_BASE = os.path.dirname(PROJECT_DIR)
-PROJECT_EXT_DIR = os.path.join(PROJECT_DIR, 'external')
-
 program_vars = Variables('site_scons/build_config.py', ARGUMENTS)
 program_vars.AddVariables(
     # Project specific variables
-    PathVariable('PROJECT_DIR', 'Path to the project directory', PROJECT_DIR,
-                 PathVariable.PathIsDir),
     EnumVariable('PLATFORM',
                  'build platforms',
                  utils.ostype(),
@@ -52,14 +44,13 @@ program_vars.AddVariables(
                  'library building type',
                  'static',
                  allowed_values=('shared', 'static', 'object')),
-    BoolVariable('VERBOSE', 'Print verbosely when compiling', True),
+    BoolVariable('VERBOSE', 'Print verbosely when compiling', False),
 )
 
 ostype = Environment(variables=program_vars)['PLATFORM']
-print(ostype)
+print('PLATFORM: ', ostype)
 
 if ostype == "windows":
-    print('ok windows')
     program_vars.AddVariables(
         ('CC', 'C compiler', 'gcc'),
         ('CXX', 'C++ compiler', 'g++'),
@@ -74,25 +65,23 @@ if ostype == "windows":
                      'C:\Program Files\MPICH2\lib', PathVariable.PathIsDir),
     )
 elif ostype == "linux":
-    print('ok linux')
     program_vars.AddVariables(
-        ('CC', 'C compiler', 'mpicc'),
-        ('CXX', 'C++ compiler', 'mpicxx'),
-        ('F90', 'fortran90 compiler', 'mpif90'),
-        ('CXX_LINKER', 'C++ linker', 'mpicxx'),
-        ('F_LINKER', 'fortran linker', 'mpif90'),
+        ('CC', 'C compiler', 'gcc'),
+        ('CXX', 'C++ compiler', 'g++'),
+        ('F90', 'fortran90 compiler', 'gfortran'),
+        ('CXX_LINKER', 'C++ linker', 'mpiicxx'),
+        ('F_LINKER', 'fortran linker', 'mpiif90'),
         ('MPI_LIB_NAME', 'MPI library name', 'mpi'),
         PathVariable(
             'MPI_INC_PATH', 'Path to MPI headers',
-            '/home/export/online3/amd_dev1/software/MPICH/gcc_build/include',
+            '/usr/sw-cluster/mpi2/include',
             PathVariable.PathIsDir),
         PathVariable(
             'MPI_LIB_PATH', 'Path to MPI libraries',
-            '/home/export/online3/amd_dev1/software/MPICH/gcc_build/lib',
+            '/usr/sw-cluster/mpi2/lib',
             PathVariable.PathIsDir),
     )
 elif ostype == "sw":
-    print('ok sw')
     program_vars.AddVariables(
         ('CC_HOST', 'c compiler on host', 'sw5gcc'),
         ('CC_SLAVE', 'c compiler on slave', 'sw5gcc'),
@@ -120,8 +109,6 @@ def init_dependent_vars(env, prj_dir):
     from SCons.Script import Mkdir
     # ostype = utils.ostype()
     ostype = env['PLATFORM']
-    # prj_dir = env['PROJECT_DIR']
-
     BUILD_OPTION = (ostype + env['CXX'] + 'Int' + env['INT_TYPE'] + 'Float' +
                     env['FLOAT_TYPE'] + env['BUILD_TYPE'])
     PLATFORM_INSTALL = os.path.join(prj_dir, 'install', BUILD_OPTION)
