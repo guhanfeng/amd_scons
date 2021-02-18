@@ -135,7 +135,7 @@ def update_compiler_settings(env):
     env.Append(CCFLAGS='-DLABEL_INT' + env['INT_TYPE'])
     env.Append(CCFLAGS='-DSCALAR_FLOAT' + env['FLOAT_TYPE'])
 
-    env.Append(CCFLAGS='-D' + ostype)
+    # env.Append(CCFLAGS='-D' + ostype)
     env.Append(CCFLAGS='-DWM_' + env['PRECISION'])
     for k in flist:
         env.Append(CCFLAGS=cflags[k].split())
@@ -178,6 +178,14 @@ def update_compiler_settings(env):
     if not env['VERBOSE']:
         simple_prints(env)
 
-    add_thirdparties(env)
+    # add_thirdparties(env)
 
     env.Append(CCFLAGS='-DTIMERS')
+
+    # make gfortran support preprocessor
+    env.Append(F90FLAGS='-cpp -fcray-pointer')
+    env.Append(FORTRANMODDIR=env['PROJECT_INC_DIR'])
+    env.Append(CCFLAGS='-rdynamic')
+
+    if env['PLATFORM'] == 'sw':
+        env.Append(CCFLAGS='-mieee')

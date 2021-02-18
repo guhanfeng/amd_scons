@@ -13,7 +13,6 @@ cslave_source_files = []
 cxxhost_source_files = []
 
 
-
 def build_object(baseenv,
                  sources,
                  program_inc,

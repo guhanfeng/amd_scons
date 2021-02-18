@@ -115,12 +115,12 @@ else:
     print('Unknown ostype')
 
 
-def init_dependent_vars(env):
+def init_dependent_vars(env, prj_dir):
     """Initialize dependent variables based on user configuration"""
     from SCons.Script import Mkdir
     # ostype = utils.ostype()
     ostype = env['PLATFORM']
-    prj_dir = env['PROJECT_DIR']
+    # prj_dir = env['PROJECT_DIR']
 
     BUILD_OPTION = (ostype + env['CXX'] + 'Int' + env['INT_TYPE'] + 'Float' +
                     env['FLOAT_TYPE'] + env['BUILD_TYPE'])

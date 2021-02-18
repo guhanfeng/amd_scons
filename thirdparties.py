@@ -29,3 +29,12 @@ def add_thirdparties(env):
 
     # if env['PLATFORM'] == 'linux':
     ## nothing
+
+
+def add_thirdparties_include_dir(env, dir):
+
+    env.Append(THIRDPARTY_INCS=dir)
+
+def add_thirdparties_lib_dir(env, dir):
+
+    env.Append(THIRDPARTY_LIB_PATH=dir)
