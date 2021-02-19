@@ -42,61 +42,62 @@ def build_object(baseenv,
     objs = libenv.Object(source=sources)
     return objs
 
+
 def build_objects(baseenv,
-                  c_source = None,
-                  cxx_source = None,
-                  fortran_source = None,
-                  chost_source = None, 
-                  cslave_source = None, 
-                  cxxhost_source = None):
-  objenv = baseenv.Clone()
-  objs=[]
-  if c_source is None:
-    c_source = []
-  if cxx_source is None:
-    cxx_source = []
-  if fortran_source is None:
-    fortran_source = []
-  if chost_source is None:
-    chost_source = []
-  if cslave_source is None:
-    cslave_source = []
-  if cxxhost_source is None:
-    cxxhost_source = []
-  objs = objs + build_object(objenv,
-                             sources=fortran_source,
-                             program_inc=objenv['THIRDPARTY_INCS'],
-                             program_libs=objenv['THIRDPARTY_LIBS'])
+                  c_source=None,
+                  cxx_source=None,
+                  fortran_source=None,
+                  chost_source=None,
+                  cslave_source=None,
+                  cxxhost_source=None):
+    objenv = baseenv.Clone()
+    objs = []
+    if c_source is None:
+        c_source = []
+    if cxx_source is None:
+        cxx_source = []
+    if fortran_source is None:
+        fortran_source = []
+    if chost_source is None:
+        chost_source = []
+    if cslave_source is None:
+        cslave_source = []
+    if cxxhost_source is None:
+        cxxhost_source = []
+    objs = objs + build_object(objenv,
+                               sources=fortran_source,
+                               program_inc=objenv['THIRDPARTY_INCS'],
+                               program_libs=objenv['THIRDPARTY_LIBS'])
 
-  objs = objs + build_object(objenv,
-                             sources=cxx_source,
-                             program_inc=objenv['THIRDPARTY_INCS'],
-                             program_libs=objenv['THIRDPARTY_LIBS'])
+    objs = objs + build_object(objenv,
+                               sources=cxx_source,
+                               program_inc=objenv['THIRDPARTY_INCS'],
+                               program_libs=objenv['THIRDPARTY_LIBS'])
 
-  objs = objs + build_object(objenv,
-                             sources=c_source,
-                             program_inc=objenv['THIRDPARTY_INCS'],
-                             program_libs=objenv['THIRDPARTY_LIBS'])
-  if objenv['PLATFORM'] == 'sw':
-      if objenv['ATHREAD']:
-          objs = objs + build_object(objenv,
-                                     sources=chost_source,
-                                     program_inc=objenv['THIRDPARTY_INCS'],
-                                     program_libs=objenv['THIRDPARTY_LIBS'],
-                                     sources_type='chost')
+    objs = objs + build_object(objenv,
+                               sources=c_source,
+                               program_inc=objenv['THIRDPARTY_INCS'],
+                               program_libs=objenv['THIRDPARTY_LIBS'])
+    if objenv['PLATFORM'] == 'sw':
+        if objenv['ATHREAD']:
+            objs = objs + build_object(objenv,
+                                       sources=chost_source,
+                                       program_inc=objenv['THIRDPARTY_INCS'],
+                                       program_libs=objenv['THIRDPARTY_LIBS'],
+                                       sources_type='chost')
 
-          objs = objs + build_object(objenv,
-                                     sources=cslave_source,
-                                     program_inc=objenv['THIRDPARTY_INCS'],
-                                     program_libs=objenv['THIRDPARTY_LIBS'],
-                                     sources_type='cslave')
+            objs = objs + build_object(objenv,
+                                       sources=cslave_source,
+                                       program_inc=objenv['THIRDPARTY_INCS'],
+                                       program_libs=objenv['THIRDPARTY_LIBS'],
+                                       sources_type='cslave')
 
-          objs = objs + build_object(objenv,
-                                     sources=cxxhost_source,
-                                     program_inc=objenv['THIRDPARTY_INCS'],
-                                     program_libs=objenv['THIRDPARTY_LIBS'],
-                                     sources_type='cxxhost')
-  return objs
+            objs = objs + build_object(objenv,
+                                       sources=cxxhost_source,
+                                       program_inc=objenv['THIRDPARTY_INCS'],
+                                       program_libs=objenv['THIRDPARTY_LIBS'],
+                                       sources_type='cxxhost')
+    return objs
 
 
 def build_lib(baseenv,

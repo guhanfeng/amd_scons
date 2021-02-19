@@ -166,5 +166,3 @@ def update_compiler_settings(env):
     # simpler compiling message
     if not env['VERBOSE']:
         simple_prints(env)
-
-    

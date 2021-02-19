@@ -16,6 +16,7 @@ from SCons.Variables import (Variables, EnumVariable, PathVariable,
                              BoolVariable)
 from SCons.Script import ARGUMENTS
 
+
 def ostype():
     """Return the operating system type"""
 
@@ -23,6 +24,7 @@ def ostype():
         return 'windows'
     else:
         return os.uname()[0].lower()
+
 
 program_vars = Variables('site_scons/build_config.py', ARGUMENTS)
 program_vars.AddVariables(
@@ -80,14 +82,10 @@ elif ostype == "linux":
         ('CXX_LINKER', 'C++ linker', 'mpiicxx'),
         ('F_LINKER', 'fortran linker', 'mpiif90'),
         ('MPI_LIB_NAME', 'MPI library name', 'mpi'),
-        PathVariable(
-            'MPI_INC_PATH', 'Path to MPI headers',
-            '/usr/sw-cluster/mpi2/include',
-            PathVariable.PathIsDir),
-        PathVariable(
-            'MPI_LIB_PATH', 'Path to MPI libraries',
-            '/usr/sw-cluster/mpi2/lib',
-            PathVariable.PathIsDir),
+        PathVariable('MPI_INC_PATH', 'Path to MPI headers',
+                     '/usr/sw-cluster/mpi2/include', PathVariable.PathIsDir),
+        PathVariable('MPI_LIB_PATH', 'Path to MPI libraries',
+                     '/usr/sw-cluster/mpi2/lib', PathVariable.PathIsDir),
     )
 elif ostype == "sw":
     program_vars.AddVariables(
